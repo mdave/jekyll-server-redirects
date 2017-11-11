@@ -60,6 +60,14 @@ module Jekyll
             end
           end
 
+          site.pages.each do |page|
+            if page.data.has_key?('redirect_from') && page.data['redirect_from'].is_a?(Array)
+              page.data['redirect_from'].each do |from_url|
+                redirects.push('from' => Regexp.escape(from_url), 'to' => page.url)
+              end
+            end
+          end
+
           template_name = 'nginx-template.conf'
           case options['server']
             when 'nginx'
